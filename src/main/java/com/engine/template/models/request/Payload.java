@@ -1,4 +1,4 @@
-package com.engine.template;
+package com.engine.template.models.request;
 
 public class Payload {
 
