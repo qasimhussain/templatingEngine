@@ -2,11 +2,101 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Thats head</title>
+
+<style type="text/css">
+img {
+max-width: 100%;
+}
+body {
+-webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em;
+}
+body {
+background-color: #f6f6f6;
+}
+@media only screen and (max-width: 640px) {
+  body {
+    padding: 0 !important;
+  }
+  h1 {
+    font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h2 {
+    font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h3 {
+    font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h4 {
+    font-weight: 800 !important; margin: 20px 0 5px !important;
+  }
+  h1 {
+    font-size: 22px !important;
+  }
+  h2 {
+    font-size: 18px !important;
+  }
+  h3 {
+    font-size: 16px !important;
+  }
+  .container {
+    padding: 0 !important; width: 100% !important;
+  }
+  .content {
+    padding: 0 !important;
+  }
+  .content-wrap {
+    padding: 10px !important;
+  }
+  .invoice {
+    width: 100% !important;
+  }
+  .nav ul {
+  list-style: none;
+  background-color: #444;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  }
+  .nav li {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.2em;
+  line-height: 40px;
+  height: 40px;
+  border-bottom: 1px solid #888;
+  }
+
+}
+</style>
 </head>
 
 <body>
-    <p>
-        Body with id<span th:text="${serverTime}"></span>
-    </p>
+
+    <h1><img th:src = "${logo_image}" alt=""/></h1>
+    <h1><span th:text="${customer_name}"></span></h1>
+    <h1><span th:text="${invoice_number}"></span></h1>
+    <h1><span th:text="${invoice_date}"></span></h1>
+    <h1><span th:text="${company_address}"></span></h1>
+    <h1><span th:text="${company_name}"></span></h1>
+    <h1><span th:text="${bill_amount_payed}"></span></h1>
+    <h1><span th:text="${bill_amount}"></span></h1>
+
+    <!--<table th:object = "${bill_items}" border="1" >-->
+
+        <!--<tr th:each="instance : ${bill_items}">-->
+            <!--<tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">-->
+                <!--<td style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" valign="top"  th:text="${instance.key} "> </td>-->
+                <!--<td class="alignright" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; text-align: right; border-top-width: 1px; border-top-color: #eee; border-top-style: solid; margin: 0; padding: 5px 0;" align="right" valign="top"  th:text="${instance.value}"></td>-->
+            <!--</tr>-->
+        <!--</tr>-->
+    <!--</table>-->
+
+    <div >
+        <h1>Result</h1>
+        <ul>
+            <th:block th:object="${bill_items}">
+                <li th:each="item : ${bill_items}" th:text="${item.key}">Item description here...</li>
+            </th:block>
+        </ul>
+    </div>
 </body>
 </html>

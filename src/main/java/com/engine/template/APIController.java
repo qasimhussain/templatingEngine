@@ -10,13 +10,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.util.*;
+
+import static Constants.ApplicatioConstants.getTemplateIfExistent;
 
 @Controller
 public class APIController {
@@ -41,6 +47,34 @@ public class APIController {
         return "email1.html";
     }
 
+    @PostMapping("/getTemplate/{templateID}")
+    public String getTemplate(@RequestBody Map<String,Object> payload, @PathVariable(value="templateID") String tempId , Model model) {
+
+        String tempName = getTemplateIfExistent("email" + tempId + ".html");
+        if (tempName == null) return "no such template";
+
+        for (String key : payload.keySet()){
+
+            Object value = payload.get(key);
+
+            if( value instanceof String){
+                model.addAttribute(key, payload.get(key));
+
+            }else if (value instanceof ArrayList<?>){
+
+                for (int i=0; i < ((ArrayList) value).size() ; i++){
+                    if(((ArrayList<?>)value).get(i) instanceof HashMap<?,?>){
+                        model.addAttribute(key, value);
+                    }
+                }
+            }
+        }
+
+        return tempName;
+    }
+
+
+
     @PostMapping("/getInvoiceEmailTemplate")
     public String getInvoiceEmailTemplate(@RequestBody InvoicePayload payload,Model model) {
 
@@ -62,38 +96,7 @@ public class APIController {
     }
 
 
-    @PostMapping("/getTemplate")
-    public String getTemplate(@RequestBody Map<String,Object> payload, Model model) {
 
-
-        for (String key : payload.keySet()){
-
-            //iterate over keys
-            logger.info("key+" +payload.get(key) + "object_type" + payload.get(key).getClass());
-            Object value = payload.get(key);
-
-            if( value instanceof String){
-                model.addAttribute(key, payload.get(key));
-
-            }else if (value instanceof ArrayList<?>){
-
-                for (int i=0; i < ((ArrayList) value).size() ; i++){
-                    if(((ArrayList<?>)value).get(i) instanceof HashMap<?,?>){
-                        for (Object keyj : ((HashMap) ((ArrayList<?>)value).get(i)).keySet()){
-
-                            if (keyj instanceof  String){
-                                logger.info("keyj+" +  ((HashMap) ((ArrayList<?>)value).get(i)).get(keyj) + "object_type" + (((HashMap) ((ArrayList<?>)value).get(i)).get(keyj).getClass()));
-                            }
-                        }
-                }
-            }
-
-
-            }
-        }
-
-        return "email_invoice.html";
-    }
 
 
     private void subDataInItems(Model model, List <Map <String, String>> invoiceBillItems) {
